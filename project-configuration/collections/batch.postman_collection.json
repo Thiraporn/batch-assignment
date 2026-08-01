@@ -1,0 +1,53 @@
+{
+  "info": {
+    "_postman_id": "5279bb35-4072-411b-ba46-bc2184e4c2bb",
+    "name": "batch",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "8845203"
+  },
+  "item": [
+    {
+      "name": "healthcheck",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5555/healthcheck",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5555",
+          "path": [
+            "healthcheck"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:9090/healthcheck'"
+      },
+      "response": []
+    },
+    {
+      "name": "run batch manually",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:5555/api/v1/batch/run",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5555",
+          "path": [
+            "api",
+            "v1",
+            "batch",
+            "run"
+          ]
+        },
+        "description": "Generated from cURL: curl --location 'http://localhost:9090/healthcheck'"
+      },
+      "response": []
+    }
+  ]
+}
