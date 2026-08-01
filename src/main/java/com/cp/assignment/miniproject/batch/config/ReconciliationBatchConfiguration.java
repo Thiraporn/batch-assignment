@@ -42,9 +42,6 @@ public class ReconciliationBatchConfiguration {
 
     private final MissingInBCsvWriter missingInBWriter;
 
-
-
-
     private final MatchedCsvWriter matchedWriter;
     private final MissingInACsvWriter missingInAWriter;
     private final ErrorWriter errorWriter;
@@ -52,18 +49,11 @@ public class ReconciliationBatchConfiguration {
     //main (1 ่job  run 3 steps)
     @Bean
     public Job reconciliationJob() {
-
-
-        return new JobBuilder(
-                "reconciliationJob",
-                jobRepository
-        )
-                .start(loadListAStep())
-                .next(reconciliationStep())
-                .next(writeMissingInBStep())
+        return new JobBuilder( "reconciliationJob",   jobRepository  )
+                .start(loadListAStep())      //1. Reading data in List A
+                .next(reconciliationStep())  //2. Matching in List B
+                .next(writeMissingInBStep()) //3. Writing output
                 .build();
-
-
     }
 
 
@@ -78,14 +68,14 @@ public class ReconciliationBatchConfiguration {
     @Bean
     public Step loadListAStep() {
         log.info("----Step 1 : loadListAStep() Read List A and keep them as HashMap -----------");
-        return new StepBuilder(
-                "loadListAStep",
-                jobRepository
-        )
-                .<ListATransaction, ListATransaction>chunk(1000)
+        return new StepBuilder(  "loadListAStep",  jobRepository   )
+                .<ListATransaction, ListATransaction>chunk(5)//split data into small group
+                // 1. add item HashMap
+                //source data - split data into small group
                 .reader(listAItemReader)
+                //add curr group into cache
                 .processor(listACacheProcessor)
-
+                // 2. prepare data for DB (if need to save data into data source)
                 // No physical output.
                 // Data is stored in cache.
                 .writer(items -> {
@@ -115,9 +105,11 @@ public class ReconciliationBatchConfiguration {
                 jobRepository
         )
                 .<ListBTransaction, ReconciliationResult>chunk(1000)
-                .reader(listBItemReader)
-                .processor(reconciliationProcessor)
-                .writer(reconciliationWriter)
+                // ไม่มี skip()
+                //.skip(RuntimeException.class)
+                .reader(listBItemReader)            //Reading List B
+                .processor(reconciliationProcessor) //Matching in List B
+                .writer(reconciliationWriter)      //Writhing Output
 
                 // Register nested writers as ItemStreams -
                 // Tell Spring Batch that matchedWriter, missingInAWriter, errorWriter is ItemStream
@@ -127,8 +119,6 @@ public class ReconciliationBatchConfiguration {
                 //.stream(errorWriter)
                 .build();
     }
-
-
     /**
      * Step 3
      * Anything remaining in List A cache
@@ -141,10 +131,7 @@ public class ReconciliationBatchConfiguration {
     @Bean
     public Step writeMissingInBStep() {
         log.info("----Step 3 : writeMissingInBStep - remaining cache = MISSING_IN_B -----------");
-        return new StepBuilder(
-                "writeMissingInBStep",
-                jobRepository
-        )
+        return new StepBuilder(  "writeMissingInBStep",    jobRepository   )
                 .tasklet(
                         (contribution, chunkContext) -> {
                             log.info("----listA remaining -----------");
@@ -157,16 +144,12 @@ public class ReconciliationBatchConfiguration {
                                         ReconciliationResult result =  reconciliationProcessor.processMissingInB(listA);
 
                                         try {
-                                            missingInBWriter.write(
-                                                    new org.springframework.batch.infrastructure.item.Chunk<>(
-                                                            java.util.List.of(result)
-                                                    )
+                                            missingInBWriter.write(  new org.springframework.batch.infrastructure.item.Chunk<>(   java.util.List.of(result) )
                                             );
                                         } catch (Exception e) {
                                             throw new RuntimeException(e);
                                         }
                                     });
-
                             return RepeatStatus.FINISHED;
                         }
                 )

@@ -14,7 +14,9 @@ public class ListACacheProcessor implements ItemProcessor<ListATransaction, List
     //read List A  1 record ,then keep that record in Cache
     @Override
     public ListATransaction process(ListATransaction item) {
+        // 1. add item HashMap
         cacheService.put(item);
+        // 2. prepare data for DB (if need to save data into data source)
         return item;
     }
 }

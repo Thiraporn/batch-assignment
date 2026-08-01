@@ -21,6 +21,7 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
     @Override
     public ReconciliationResult process(ListBTransaction listB) {
 
+
         // Validate List B
         String validationBError = validateListB(listB);
 
