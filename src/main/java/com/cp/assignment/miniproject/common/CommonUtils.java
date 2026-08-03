@@ -6,6 +6,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class CommonUtils {
+    // Sentinel value used only to represent invalid decimal format.
+    // This value is outside the expected transaction amount range.
+    private static final BigDecimal INVALID_DECIMAL =  new BigDecimal("-999999999999999999999999999999999999.999999");
+
     public static boolean isBlank(String value) {
         return value == null || value.isBlank();
     }
@@ -40,4 +44,22 @@ public class CommonUtils {
             return null;
         }
     }
+
+    public static BigDecimal parseDecimal(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        try {
+            return new BigDecimal(value.replace(",", ""));
+        } catch (NumberFormatException e) {
+            return INVALID_DECIMAL;
+        }
+    }
+
+    public static boolean isInvalidDecimal(BigDecimal value) {
+        return value != null
+                && value.compareTo(INVALID_DECIMAL) == 0;
+    }
+
 }

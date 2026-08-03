@@ -45,17 +45,15 @@ public class ListBReader {
 //                    System.out.println( "READ B  ROW NUMBER = [" + field.readString("rowNumber")  + "]"  );
 //                    System.out.println( "READ B  INVOICE = ["   + field.readString("invoiceNumber")   + "]"  );
 //                    System.out.println( "READ B  DATE = ["   + d  + "]"  );
-
-
                     return ListBTransaction.builder()
                             .rowNumber(field.readString("rowNumber"))
                             .invoiceNumber(field.readString("invoiceNumber"))
                             .transactionDate(CommonUtils.ddMMyyyyParseDate(field.readString("transactionDate") ))
-                            .amount(field.readBigDecimal("amount"))
-                            .fees1(field.readBigDecimal("fees1"))
-                            .fees2(field.readBigDecimal("fees2"))
-                            .netTotal(field.readBigDecimal("netTotal"))
-                            .cardNumber(field.readString("cardNumber"))
+                            .amount(CommonUtils.parseDecimal(field.readString("amount")))
+                            .fees1(CommonUtils.parseDecimal(field.readString("fees1")))
+                            .fees2(CommonUtils.parseDecimal(field.readString("fees2")))
+                            .netTotal(CommonUtils.parseDecimal(field.readString("netTotal")))
+                            .cardNumber( field.readString("cardNumber"))
                             .status(field.readString("status"))
                             .build();
                 })

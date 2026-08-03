@@ -16,7 +16,7 @@ public class HealthCheckController {
     // API Health Check
     @GetMapping("/healthcheck")
     public ResponseEntity<?> healthCheck() {
-        return ResponseEntity.ok(new MessageResponse("This is the health-check page : batch-service"));
+        return ResponseEntity.ok(new MessageResponse("This is the health-check page : batch-service is alive!!"));
     }
 
 

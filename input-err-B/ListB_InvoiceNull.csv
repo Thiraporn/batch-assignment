@@ -1,0 +1,3 @@
+#,Invoice Number,Transaction Date,Amount,Fees1,Fees2,Net Total,Card Number,Status
+1,2696111,16-04-2025,"3,900.00",-0.8,-21.3,"3,877.90",555555****1111,Success
+2,,16-04-2025,520.00,-0.8,-11.76,507.44,555555****1111,Failed

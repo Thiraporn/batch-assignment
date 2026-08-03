@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, ReconciliationResult> {
 
     private final ListACacheService cacheService;
+
     //process matching
     @Override
     public ReconciliationResult process(ListBTransaction listB) {
@@ -36,7 +37,7 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
          * Therefore, remaining records in cache
          * after List B finishes are MISSING_IN_B.
          */
-
+        // Find and remove List A from cache
         ListATransaction listA = cacheService.remove(invoiceNumber);
 
         //ListATransaction listA = cacheService.get(invoiceNumber);
@@ -54,7 +55,7 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
         String validationAError = validateListA(listA);
 
         // Found in both A and B
-        cacheService.remove(invoiceNumber);
+        //cacheService.remove(invoiceNumber);
         return ReconciliationResult.builder()
                 .status(EResultType.MATCHED)
                 .listA(listA)
@@ -62,6 +63,7 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
                 .errorMessage(validationAError)
                 .build();
     }
+
     // Validate List A in final step
     public ReconciliationResult processMissingInB(ListATransaction listA) {
         String validationAError = validateListA(listA);
@@ -76,60 +78,80 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
 
     private String validateListB(ListBTransaction listB) {
 
-            if (listB == null) {
-                return "List B transaction is null";
-            }
+        if (listB == null) {
+            return "List B transaction is null";
+        }
 
-            if (CommonUtils.isBlank(listB.getInvoiceNumber())) {
-                return "Invoice number is required";
-            }
+        if (CommonUtils.isBlank(listB.getInvoiceNumber())) {
+            return "Invoice number is required";
+        }
 
-            if (listB.getTransactionDate() == null) {
-                return "Transaction date is required";
-            }
+        if (listB.getTransactionDate() == null) {
+            return "Transaction date is required";
+        }
 
-            if (listB.getAmount() == null) {
-                return "Amount is required";
-            }
+        if (listB.getAmount() == null) {
+            return "Amount is required";
+        }
 
-            if (listB.getFees1() == null) {
-                return "Fees1 is required";
-            }
+        if (CommonUtils.isInvalidDecimal(listB.getAmount())) {
+            return "Amount has invalid format";
+        }
 
-            if (!CommonUtils.isNegative(listB.getFees1())) {
-                return "Fees1 should be negative";
-            }
+        if (CommonUtils.isNegative(listB.getAmount())) {
+            return "Amount cannot be negative";
+        }
 
-            if (listB.getFees2() == null) {
-                return "Fees2 is required";
-            }
-            if (!CommonUtils.isNegative(listB.getFees2())) {
-                return "Fees2 should be negative";
-            }
 
-            if (CommonUtils.isNegative(listB.getAmount())) {
-                return "Amount cannot be negative";
-            }
+        if (listB.getFees1() == null) {
+            return "Fees1 is required";
+        }
 
-            if (listB.getNetTotal() == null) {
-                return "Net total is required";
-            }
+        if (CommonUtils.isInvalidDecimal(listB.getFees1())) {
+            return "Fees1 has invalid format";
+        }
 
-            if (CommonUtils.isNegative(listB.getNetTotal())) {
-                return "Net total cannot be negative";
-            }
+        if (!CommonUtils.isNegative(listB.getFees1())) {
+            return "Fees1 should be negative";
+        }
 
-            if (CommonUtils.isBlank(listB.getCardNumber())) {
-                return "Card number is required";
-            }
+        if (listB.getFees2() == null) {
+            return "Fees2 is required";
+        }
 
-            if (CommonUtils.isBlank(listB.getStatus())) {
-                return "Status is required";
-            }
+        if (CommonUtils.isInvalidDecimal(listB.getFees2())) {
+            return "Fees2 has invalid format";
+        }
 
-            return null;
+        if (!CommonUtils.isNegative(listB.getFees2())) {
+            return "Fees2 should be negative";
+        }
+
+
+        if (listB.getNetTotal() == null) {
+            return "Net total is required";
+        }
+
+        if (CommonUtils.isInvalidDecimal(listB.getNetTotal())) {
+            return "Net total  has invalid format";
+        }
+
+        if (CommonUtils.isNegative(listB.getNetTotal())) {
+            return "Net total cannot be negative";
+        }
+
+        if (CommonUtils.isBlank(listB.getCardNumber())) {
+            return "Card number is required";
+        }
+
+        if (CommonUtils.isBlank(listB.getStatus())) {
+            return "Status is required";
+        }
+
+        return null;
 
     }
+
     private String validateListA(ListATransaction listA) {
         if (CommonUtils.isBlank(listA.getOrderNumber())) {
             return "Order number is required";
@@ -143,12 +165,22 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
             return "Amount is required";
         }
 
+        if (CommonUtils.isInvalidDecimal(listA.getAmount())) {
+            return "Amount has invalid format";
+        }
+
         if (CommonUtils.isNegative(listA.getAmount())) {
             return "Amount cannot be negative";
         }
+
         if (listA.getFees1() == null) {
             return "Fees1 is required";
         }
+
+        if (CommonUtils.isInvalidDecimal(listA.getFees1())) {
+            return "Fees1 has invalid format";
+        }
+
 
         if (!CommonUtils.isNegative(listA.getFees1())) {
             return "Fees1 should be negative";
@@ -157,6 +189,11 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
         if (listA.getFees2() == null) {
             return "Fees2 is required";
         }
+
+        if (CommonUtils.isInvalidDecimal(listA.getFees2())) {
+            return "Fees2 has invalid format";
+        }
+
         if (!CommonUtils.isNegative(listA.getFees2())) {
             return "Fees2 should be negative";
         }
@@ -169,6 +206,9 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
             return "Net total cannot be negative";
         }
 
+        if (CommonUtils.isInvalidDecimal(listA.getNetTotal())) {
+            return "Net total has invalid format";
+        }
         if (CommonUtils.isBlank(listA.getStatus())) {
             return "Status is required";
         }
@@ -177,4 +217,4 @@ public class ReconciliationProcessor implements ItemProcessor<ListBTransaction, 
     }
 
 
-    }
+}

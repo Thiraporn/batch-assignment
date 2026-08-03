@@ -49,10 +49,10 @@ public class ListAReader {
                                         .orderNumber(field.readString("orderNumber"))
                                         //.transactionDate(  field.readString("transactionDate") != null  ? LocalDate.parse(  field.readString("transactionDate"),  DATE_FORMATTER)  : null )
                                         .transactionDate(CommonUtils.yyyyMMddParseDate(field.readString("transactionDate") ))
-                                        .amount(field.readBigDecimal("amount"))
-                                        .fees1(field.readBigDecimal("fees1"))
-                                        .fees2(field.readBigDecimal("fees2"))
-                                        .netTotal(field.readBigDecimal("netTotal"))
+                                        .amount(CommonUtils.parseDecimal(field.readString("amount")))
+                                        .fees1(CommonUtils.parseDecimal(field.readString("fees1")))
+                                        .fees2(CommonUtils.parseDecimal(field.readString("fees2")))
+                                        .netTotal(CommonUtils.parseDecimal(field.readString("netTotal")))
                                         .status(field.readString("status"))
                                         .build();
                             }
