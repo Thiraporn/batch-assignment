@@ -1,17 +1,13 @@
 package com.cp.assignment.miniproject.batch.process;
 
 import com.cp.assignment.miniproject.batch.model.ListBTransaction;
-import com.cp.assignment.miniproject.batch.model.ReconciliationResult;
-import com.cp.assignment.miniproject.batch.service.ListACacheService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.JobExecution;
 import org.springframework.batch.core.job.parameters.JobParameters;
 import org.springframework.batch.core.job.parameters.JobParametersBuilder;
-import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.test.JobOperatorTestUtils;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +25,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @SpringBatchTest
+//@TestPropertySource(properties = {
+//        "spring.datasource.url=jdbc:h2:mem:batchtest;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+//        "spring.datasource.driver-class-name=org.h2.Driver",
+//        "spring.datasource.username=sa",
+//        "spring.datasource.password=",
+//        "spring.jpa.hibernate.ddl-auto=create-drop",
+//        "spring.batch.jdbc.initialize-schema=always",
+//        "spring.batch.job.enabled=false"
+//})
 @Import(ReconciliationBatchIntegrationTest.TestBatchConfig.class)
 class ReconciliationBatchIntegrationTest {
 
@@ -37,6 +42,10 @@ class ReconciliationBatchIntegrationTest {
 
     @Autowired
     private Job reconciliationJob;
+
+
+    @Autowired
+    private JobRepository jobRepository;
 
     /*   Example chunk = 5    */
      /*List B
@@ -86,7 +95,10 @@ class ReconciliationBatchIntegrationTest {
         // =========================
         // RUN #2 - RESTART
         // =========================
-        JobExecution secondExecution = jobOperator.start(reconciliationJob, jobParameters);
+       // JobExecution secondExecution = jobOperator.start(reconciliationJob, jobParameters);
+        JobExecution secondExecution =  jobOperator.restart(firstExecution);
+
+        // jobParameters Spring Batch จึงรู้ว่า Step 1 ไม่ต้องทำใหม่ และ Step 2 สามารถ restart ได้
         System.out.println("RUN #2 STATUS = " + secondExecution.getStatus());
         // ต้อง COMPLETED
         assertEquals(BatchStatus.COMPLETED, secondExecution.getStatus());
@@ -101,26 +113,28 @@ class ReconciliationBatchIntegrationTest {
         AtomicBoolean firstRun = new AtomicBoolean(true);
         AtomicInteger count = new AtomicInteger();
 
+
         @Bean
         @Primary
-        ReconciliationProcessor testReconciliationProcessor(ListACacheService listACacheService) {
-            return new ReconciliationProcessor(listACacheService) {
+        ListBValidationProcessor testListBValidationProcessor() {
+            return new ListBValidationProcessor() {
 
                 @Override
-                public ReconciliationResult process(
-                        ListBTransaction item) {
+                public ListBTransaction process(ListBTransaction item) {
                     // เก็บว่า Processor ถูกเรียกกับ record ไหน
                     int current = count.incrementAndGet();
                     System.out.println("PROCESSING #" + current + "PROCESSING invoice = " + item.getInvoiceNumber());
+
                     // จำลอง error ที่ record 7
                     // TEST ONLY
                     // Record 7 = invoice 2696117
-                    if (firstRun.get() && "2696117".equals(item.getInvoiceNumber())) {
+                    if (   firstRun.get()    && "2696117".equals(item.getInvoiceNumber())  ) {
                         System.out.println("!!! TEST ERROR at invoice = " + item.getInvoiceNumber());
+
                         // ให้ Restart ครั้งต่อไปผ่าน
                         firstRun.set(false);
                         System.out.println("...............Waiting for resume a job = " + item.getInvoiceNumber());
-                        throw new RuntimeException("TEST ERROR");
+                        throw new RuntimeException(  "TEST ERROR at invoice 2696117"     );
                     }
 
                     return super.process(item);

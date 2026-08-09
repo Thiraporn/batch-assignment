@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
+//@ConditionalOnProperty คือ Annotation ของ Spring Boot
+// ที่ใช้กำหนดว่า Bean / Configuration นี้จะถูกสร้างหรือไม่ โดยดูจากค่าใน application.properties
 @ConditionalOnProperty(
         name = "batch.scheduler.enabled",
         havingValue = "true"
