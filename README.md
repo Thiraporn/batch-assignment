@@ -88,7 +88,8 @@ The Cron expression configuration can be found in [`application.properties`](src
 
 ## ▶️ Run the Project
 
-For project setup and configuration instructions, please refer to **Section 3.5 of the Assignment 2: Project Common Configuration** document.
+For project setup and **[configuration](https://github.com/Thiraporn/Document-2C2P-Job-Assignment/blob/main/configuration/project_common_confuguration.pdf)** instructions, please refer to **Section 3.5 of the Assignment 2: Project Common Configuration** document.
+
 
 ![batch_manually_run](project-configuration/screen/ProjectCommonConfiguration.png)
 
