@@ -88,7 +88,8 @@ The Cron expression configuration can be found in [`application.properties`](src
 
 ## ▶️ Run the Project
 
-For project setup and configuration instructions, please refer to **Section 3.5 of the Assignment 2: Project Common Configuration** document.
+For project setup and **[configuration](https://github.com/Thiraporn/Document-2C2P-Job-Assignment/blob/main/configuration/project_common_confuguration.pdf)** instructions, please refer to **Section 3.5 of the Assignment 2: Project Common Configuration** document.
+
 
 ![batch_manually_run](project-configuration/screen/ProjectCommonConfiguration.png)
 
@@ -123,8 +124,17 @@ The following improvements can be considered for future development:
 - **Summary / Error Report** — Include total, success, error, and error reasons for easier support and troubleshooting. This may require additional server storage.
 - **Field Validation** — Add validation for input fields.
 - **JUnit Tests** — Implement unit tests to ensure that new changes do not introduce errors.
+- **Asymmetric Encryption** — Implement using a pair of linked keys—a public key for sharing and a private key for keeping secret.
+- **Optimize Memory Usage** — Use SQL and external storage instead of in-memory data structures.
 
+## 🚀 Version
 
+* `0.0.1-SNAPSHOT` → first release (30/7/2026 9.00 p.m.)
+    - JWT tokens are the standard way to authenticate APIs (Symmetric Encryption)
+    -  HashMap reconciliation
+* `1.0.0` → v1.0-enable-kotlin (9/8/2026 5.00 p.m.)
+    - refactor: replace HashMap reconciliation with SQL approach
+    - test: add automated tests using JUnit and Mockito
 
 
 

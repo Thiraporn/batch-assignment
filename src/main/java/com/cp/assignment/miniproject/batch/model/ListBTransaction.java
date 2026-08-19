@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListBTransaction {
+public class ListBTransaction implements ReconciliationRecord{
     //#|Invoice Number|Transaction Date|Amount|Fees1|Fees2|Net Total|Card Number|Status
     private String rowNumber;
     private String invoiceNumber;// merchant order number
@@ -23,6 +23,16 @@ public class ListBTransaction {
     private BigDecimal netTotal;
     private String cardNumber;
     private String status;
+    private String errorMessage;
 
+    @Override
+    public String getReference() {
+        return invoiceNumber;
+    }
+
+    @Override
+    public String getSourceFile() {
+        return "ListB.csv";
+    }
 
 }
