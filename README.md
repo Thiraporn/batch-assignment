@@ -130,7 +130,7 @@ The following improvements can be considered for future development:
 
 * `0.0.1-SNAPSHOT` → first release (30/7/2026 9.00 p.m.)
     -  HashMap reconciliation
-* `1.0.0` → v1.0-enable-kotlin (9/8/2026 5.00 p.m.)
+* `1.0.0` → feature reconciliation-sql  (9/8/2026 5.00 p.m.)
     - refactor: replace HashMap reconciliation with SQL approach
     - test: add automated tests using JUnit and Mockito
 
