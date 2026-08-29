@@ -124,13 +124,11 @@ The following improvements can be considered for future development:
 - **Summary / Error Report** — Include total, success, error, and error reasons for easier support and troubleshooting. This may require additional server storage.
 - **Field Validation** — Add validation for input fields.
 - **JUnit Tests** — Implement unit tests to ensure that new changes do not introduce errors.
-- **Asymmetric Encryption** — Implement using a pair of linked keys—a public key for sharing and a private key for keeping secret.
 - **Optimize Memory Usage** — Use SQL and external storage instead of in-memory data structures.
 
 ## 🚀 Version
 
 * `0.0.1-SNAPSHOT` → first release (30/7/2026 9.00 p.m.)
-    - JWT tokens are the standard way to authenticate APIs (Symmetric Encryption)
     -  HashMap reconciliation
 * `1.0.0` → v1.0-enable-kotlin (9/8/2026 5.00 p.m.)
     - refactor: replace HashMap reconciliation with SQL approach
