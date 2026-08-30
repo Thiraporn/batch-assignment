@@ -1,13 +1,11 @@
 
-# Mini Project Assignment
+# Mini Project Batch Processing
 ![status](https://img.shields.io/badge/status-complete-brightgreen)
  
 
 ## 📌 Overview
 
-This project is part of the **2C2P Job Assignment**.
-
-- **Assignment 2:** Develop a batch processing utility that compares two financial datasets.
+Develop a batch processing utility that compares two financial datasets.
 
 ## 🏗️ How to Use the API
 ### 1. Create Postman Workspace
