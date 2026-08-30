@@ -11,23 +11,6 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ListBValidationProcessorTest {
-            /*| Case                 | Expected              |
-            | -------------------- | --------------------- |
-            | item = null          | `ValidationException` |
-            | invoiceNumber ว่าง   | `ValidationException` |
-            | transactionDate null | error                 |
-            | amount null          | error                 |
-            | amount ติดลบ         | error                 |
-            | fees1 null           | error                 |
-            | fees1 ไม่ติดลบ       | error                 |
-            | fees2 null           | error                 |
-            | fees2 ไม่ติดลบ       | error                 |
-            | netTotal null        | error                 |
-            | netTotal ติดลบ       | error                 |
-            | cardNumber ว่าง      | error                 |
-            | status ว่าง          | error                 |
-            | valid record         | ไม่มี error           |
-*/
     private ListBValidationProcessor processor;
 
     @BeforeEach
