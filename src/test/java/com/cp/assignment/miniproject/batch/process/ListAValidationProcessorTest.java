@@ -12,20 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ListAValidationProcessorTest {
            /* | Case                 | Expected              |
-            | -------------------- | --------------------- |
-            | item = null          | `ValidationException` |
-            | orderNumber ว่าง     | `ValidationException` |
-            | transactionDate null | error message         |
-            | amount null          | error message         |
-            | amount ติดลบ         | error message         |
+            | --------------------   | --------------------- |
+            | item = null            | `ValidationException` |
+            | orderNumber ว่าง        | `ValidationException` |
+            | transactionDate null  | error message         |
+            | amount null           | error message         |
+            | amount ติดลบ          | error message         |
             | fees1 null           | error message         |
-            | fees1 ไม่ติดลบ       | error message         |
+            | fees1 ไม่ติดลบ         | error message         |
             | fees2 null           | error message         |
-            | fees2 ไม่ติดลบ       | error message         |
+            | fees2 ไม่ติดลบ         | error message         |
             | netTotal null        | error message         |
             | netTotal ติดลบ       | error message         |
             | status ว่าง          | error message         |
-            | valid record         | `errorMessage = ""`   |*/
+            | valid record       | `errorMessage = ""`   |*/
 
     private ListAValidationProcessor processor;
 
@@ -36,7 +36,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenTransactionDateIsNull() {
-
+        /* Case transactionDate null        Expected  error message  */
         ListATransaction item = createValidListA();
         item.setTransactionDate(null);
 
@@ -48,7 +48,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenAmountIsNull() {
-
+        /* Case amount null       Expected  error message  */
         ListATransaction item = createValidListA();
         item.setAmount(null);
 
@@ -59,7 +59,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenAmountIsNegative() {
-
+        /* Case amount ติดลบ        Expected  error message  */
         ListATransaction item = createValidListA();
         item.setAmount(new BigDecimal("-100.00"));
 
@@ -70,7 +70,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenFees1IsNull() {
-
+        /* Case fees1 null         Expected  error message  */
         ListATransaction item = createValidListA();
         item.setFees1(null);
 
@@ -81,7 +81,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenFees1IsNotNegative() {
-
+        /* Case fees1 ไม่ติดลบ       Expected  error message  */
         ListATransaction item = createValidListA();
         item.setFees1(new BigDecimal("10.00"));
 
@@ -92,7 +92,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenFees2IsNull() {
-
+        /* Case fees2 null        Expected  error message  */
         ListATransaction item = createValidListA();
         item.setFees2(null);
 
@@ -103,7 +103,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenFees2IsNotNegative() {
-
+        /* Case fees2 ไม่ติดลบ         Expected  error message  */
         ListATransaction item = createValidListA();
         item.setFees2(new BigDecimal("10.00"));
 
@@ -114,7 +114,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenNetTotalIsNull() {
-
+        /* Case netTotal null      Expected  error message  */
         ListATransaction item = createValidListA();
         item.setNetTotal(null);
 
@@ -125,7 +125,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenNetTotalIsNegative() {
-
+        /* Case netTotal ติดลบ       Expected  error message  */
         ListATransaction item = createValidListA();
         item.setNetTotal(new BigDecimal("-100.00"));
 
@@ -136,7 +136,7 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnValidationErrorWhenStatusIsBlank() {
-
+        /* Case status ว่าง   Expected  error message  */
         ListATransaction item = createValidListA();
         item.setStatus("");
 
@@ -147,23 +147,24 @@ class ListAValidationProcessorTest {
 
     @Test
     void shouldReturnEmptyErrorMessageWhenListAIsValid() {
-
+        /* Case valid record       Expected  `errorMessage = ""`  */
         ListATransaction item = createValidListA();
-
         ListATransaction result = processor.process(item);
 
+        /* Case item = null     Expected  `ValidationException`  */
         assertNotNull(result);
         assertEquals("", result.getErrorMessage());
     }
 
     @Test
     void shouldThrowValidationExceptionWhenListAIsNull() {
+        /* Case item = null     Expected  `ValidationException`  */
         assertThrows(  ValidationException.class, () -> processor.process(null) );
     }
 
     @Test
     void shouldThrowValidationExceptionWhenOrderNumberIsBlank() {
-
+        /* Case  orderNumber ว่าง      Expected  `ValidationException`  */
         ListATransaction item = createValidListA();
         item.setOrderNumber("");
 
@@ -171,9 +172,8 @@ class ListAValidationProcessorTest {
 
         assertEquals(   "Order number is required",  exception.getMessage() );
     }
-
+   //Demo Object for A
     private ListATransaction createValidListA() {
-
         return ListATransaction.builder()
                 .rowNumber("1")
                 .orderNumber("2696115")

@@ -47,17 +47,14 @@ class ReconciliationRepositoryTest {
     }
 
     //Case 2: Match แต่ List A มี error
-   /* List A
-    2696115
-    error = "Amount cannot be negative"
+    /*  List A 2696115 amount = -1
+        error = "Amount cannot be negative"
 
-    List B
-    2696115
-    error = null
+        List B 2696115
+        error = null
 
-    Expected:
-    MATCHED
-    error_message = "Amount cannot be negative"*/
+        Expected: MATCHED
+        error_message = "Amount cannot be negative"*/
     @Test
     void shouldKeepListAErrorWhenGeneratingMatchedRecord() {
 
@@ -78,10 +75,11 @@ class ReconciliationRepositoryTest {
         assertEquals(  "Amount cannot be negative",   error );
     }
     //Case 3: Match แต่ List B มี error
-  /*  A error = null
-    B error = "Net total is required"
-    Expected:
-    error_message = "Net total is required"*/
+      /*  A error = null
+        B error = "Net total is required"
+
+        Expected:
+        error_message = "Net total is required"*/
 
     @Test
     void shouldKeepListBErrorWhenGeneratingMatchedRecord() {
@@ -107,10 +105,10 @@ class ReconciliationRepositoryTest {
 
 
     //Case 4: ทั้ง A และ B มี error    test logic sql a.error_message || ';' || b.error_message
-    /*A error = "Amount cannot be negative"
-    B error = "Net total is required"
+        /*A error = "Amount cannot be negative"
+          B error = "Net total is required"
 
-    Expected: Amount cannot be negative;Net total is required*/
+        Expected: Amount cannot be negative;Net total is required*/
 
     @Test
     void shouldCombineListAAndListBErrorsWhenBothHaveErrors() {
@@ -172,9 +170,9 @@ class ReconciliationRepositoryTest {
             2696115
             2696116
 
-    Expected:
-    Missing In A:
-            2696116*/
+    Expected: Missing In A: 2696116
+
+    */
     @Test
     void shouldGenerateMissingInARecord() {
 
@@ -197,17 +195,17 @@ class ReconciliationRepositoryTest {
         assertEquals(1, count);
     }
     //Case 7: Missing In B
-   /* Scenario:
-    A:
-            2696115
-            2696116
+       /* Scenario:
+        A:
+                2696115
+                2696116
 
-    B:
-            2696115
+        B:
+                2696115
 
-    Expected:
-    Missing In B:
-            2696116*/
+        Expected: Missing In B: 2696116
+
+        */
     @Test
     void shouldGenerateMissingInBRecord() {
 
@@ -231,19 +229,20 @@ class ReconciliationRepositoryTest {
     }
 
     //Case 8: mark Reconciled  A
-/* Scenario:
-    A:
-            2696115
-            2696116
+    /* Scenario:
+        A:
+                2696115
+                2696116
 
-    B:
-            2696115
+        B:
+                2696115
 
-    Expected:
-    Missing In B:
-            A 2696115 → true
-            A 2696116 → false
-            */
+        Expected: Missing In B:
+                A 2696115 → true   -----> match
+                A 2696116 → false  -----> not match
+
+
+                */
 
     @Test
     void shouldMarkOnlyMatchingListAAsReconciled() {
