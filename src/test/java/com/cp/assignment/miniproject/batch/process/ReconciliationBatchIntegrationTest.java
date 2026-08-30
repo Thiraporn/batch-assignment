@@ -47,10 +47,9 @@ class ReconciliationBatchIntegrationTest {
     @Autowired
     private JobRepository jobRepository;
 
-    /*   Example chunk = 5    */
+    /*  Example chunk = 5  แล้วมีการ Error กลางทาง  */
      /*List B
-
-        1  → 2696111
+                1  → 2696111
                 2  → 2696112
                 3  → 2696113
                 4  → 2696114
@@ -58,7 +57,7 @@ class ReconciliationBatchIntegrationTest {
                 ↓
             CHUNK 1    check point #1
                 ↓
-        COMMIT ✅
+            COMMIT
                 6  → 2696116
                 7  → 2696117  ← TestBatchConfig ทำให้ ERROR
                 8  → 2696118
@@ -66,17 +65,16 @@ class ReconciliationBatchIntegrationTest {
                 10 → 2696120
                 ↓
             CHUNK 2    check point #2
-                    ↓
+                ↓
             ERROR
                ↓
-            ROLLBACK ❌*
+            ROLLBACK XXXXXXXX <----ไม่เอาเข้า Database
 
-            จากนั้น restart(): start from last check point
+            จากนั้น restart(): start from last check point   ====> check point #2
              6 7 8 9 10
              ↓
-            COMMIT ✅
+            COMMIT
            Job COMPLETED
-
          */
     @Test
     void testRestart() throws Exception {

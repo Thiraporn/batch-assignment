@@ -60,21 +60,15 @@ public class CommonUtils {
     public static boolean isInvalidDecimal(BigDecimal value) {
         return value != null   && value.compareTo(INVALID_DECIMAL) == 0;
     }
+    //  data field helper to find delimiter
     public static String csv(String value) {
-
         if (value == null) {
             return "";
         }
-
         String escaped = value.replace("\"", "\"\"");
-
-        if (escaped.contains(",")
-                || escaped.contains("\"")
-                || escaped.contains("\n")) {
-
+        if (escaped.contains(",") || escaped.contains("\"") || escaped.contains("\n")) {
             return "\"" + escaped + "\"";
         }
-
         return escaped;
     }
 

@@ -36,12 +36,12 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldThrowValidationExceptionWhenListBIsNull() {
+    void shouldThrowValidationExceptionWhenListBIsNull() { /* Case item = null     Expected  `ValidationException`  */
         assertThrows(  ValidationException.class,    () -> processor.process(null) );
     }
 
     @Test
-    void shouldThrowValidationExceptionWhenInvoiceNumberIsBlank() {
+    void shouldThrowValidationExceptionWhenInvoiceNumberIsBlank() {/* Case  invoiceNumber ว่าง      Expected  `ValidationException`  */
 
         ListBTransaction item = createValidListB();
         item.setInvoiceNumber("");
@@ -52,7 +52,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenTransactionDateIsNull() {
+    void shouldReturnValidationErrorWhenTransactionDateIsNull() {/* Case transactionDate null        Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setTransactionDate(null);
@@ -63,7 +63,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenAmountIsNull() {
+    void shouldReturnValidationErrorWhenAmountIsNull() { /* Case amount null       Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setAmount(null);
@@ -85,7 +85,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenFees1IsNull() {
+    void shouldReturnValidationErrorWhenFees1IsNull() { /* Case fees1 null         Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setFees1(null);
@@ -96,7 +96,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenFees1IsNotNegative() {
+    void shouldReturnValidationErrorWhenFees1IsNotNegative() { /* Case amount ติดลบ        Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setFees1(new BigDecimal("10.00"));
@@ -107,7 +107,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenFees2IsNull() {
+    void shouldReturnValidationErrorWhenFees2IsNull() { /* Case fees2 null        Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setFees2(null);
@@ -118,7 +118,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenFees2IsNotNegative() {
+    void shouldReturnValidationErrorWhenFees2IsNotNegative() { /* Case fees2 ไม่ติดลบ         Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setFees2(new BigDecimal("10.00"));
@@ -129,7 +129,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenNetTotalIsNull() {
+    void shouldReturnValidationErrorWhenNetTotalIsNull() { /* Case netTotal null      Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setNetTotal(null);
@@ -140,7 +140,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenNetTotalIsNegative() {
+    void shouldReturnValidationErrorWhenNetTotalIsNegative() {  /* Case netTotal ติดลบ       Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setNetTotal(new BigDecimal("-100.00"));
@@ -151,7 +151,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenCardNumberIsBlank() {
+    void shouldReturnValidationErrorWhenCardNumberIsBlank() {     /* Case cardNumber  Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setCardNumber("");
@@ -162,7 +162,7 @@ class ListBValidationProcessorTest {
     }
 
     @Test
-    void shouldReturnValidationErrorWhenStatusIsBlank() {
+    void shouldReturnValidationErrorWhenStatusIsBlank() { /* Case status ว่าง   Expected  error message  */
 
         ListBTransaction item = createValidListB();
         item.setStatus("");
@@ -174,17 +174,15 @@ class ListBValidationProcessorTest {
 
     @Test
     void shouldReturnEmptyErrorMessageWhenListBIsValid() {
-
+        /* Case valid record       Expected  `errorMessage = ""`  */
         ListBTransaction item = createValidListB();
-
         ListBTransaction result = processor.process(item);
-
+        /* Case item = null     Expected  `ValidationException`  */
         assertNotNull(result);
         assertEquals("", result.getErrorMessage());
     }
-
+    //Demo Object for B
     private ListBTransaction createValidListB() {
-
         return ListBTransaction.builder()
                 .rowNumber("7")
                 .invoiceNumber("2696115")
